@@ -19,13 +19,15 @@ namespace A1_SODV2202_Calculator
             try
 
             {
+                //functionality to remove all spaces in the input string
+                input = input.Replace(" ", "");
+                input = System.Text.RegularExpressions.Regex.Replace(input, @"\s+", "");
 
 
+               
 
 
-
-
-                return "";
+                return input;
 
             }
 
