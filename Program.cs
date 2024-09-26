@@ -9,6 +9,24 @@ namespace A1_SODV2202_Calculator
 
     // TODO Add supporting classes here
     public class Token
+
+    {
+        //This is used to store the math expressions...
+        public string expression;
+
+        public Token(string expression)
+        {
+            this.expression = expression;
+        }
+    }
+
+    public class Parse
+    {
+
+    }
+    public class Program
+
+
     {
         //This is used to store the math expressions...
         public string expression;
@@ -18,6 +36,7 @@ namespace A1_SODV2202_Calculator
             
             this.expression = expression;
         }
+
 
         /*We use this block of code to basically loop through the expression, then when we see a number, we will collect it and put
          it in a box called current number, and when we see an operator, we will then empty the current number box into the tokens box alongside
@@ -88,8 +107,11 @@ namespace A1_SODV2202_Calculator
 
         {
 
+
+
             try
             {
+
                 //functionality to remove all spaces in the input string
                 input = input.Replace(" ", "");
                 input = System.Text.RegularExpressions.Regex.Replace(input, @"\s+", "");
