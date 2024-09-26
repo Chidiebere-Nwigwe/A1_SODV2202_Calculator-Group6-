@@ -33,7 +33,10 @@ namespace A1_SODV2202_Calculator
 
             try
             {
-                return "";
+                //functionality to remove all spaces in the input string
+                input = input.Replace(" ", "");
+                input = System.Text.RegularExpressions.Regex.Replace(input, @"\s+", "");
+                return input;
             }
 
             catch (Exception e)
