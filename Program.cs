@@ -8,11 +8,11 @@ namespace A1_SODV2202_Calculator
 {
     // TODO Add supporting classes here
 
-
     //A token class is created to split the user input and seperate it into numbers and operators.
     public class Token
     {
-        //we use this line of code to store the math expression
+        //This is used to store the math expressions...
+
         public string expression;
 
         public Token(string expression)
@@ -24,7 +24,6 @@ namespace A1_SODV2202_Calculator
          it in a box called current number, and when we see an operator, we will then empty the current number box into the tokens box alongside
         the operator, then we will start again with the next number until we reach the end
         */
-        //public List<string> Tokenize()
         public List<string> Tokenize()
         {
             //we use tokens to store the number that is collected in current number string
@@ -131,8 +130,6 @@ namespace A1_SODV2202_Calculator
                     //if operator is available and is of low priority, push it into the operators stack
                     operators.Push(token);
                 }
-
-
                 //conditional logic to check for opening parenthesis
                 else if (token == "(")
                 {
@@ -158,45 +155,31 @@ namespace A1_SODV2202_Calculator
         }
     }
 
-        // TODO Add supporting classes here
-        public class Program
-
+    public class Program
     {
-
         public static string ProcessCommand(string input)
-
         {
-
             try
             {
-                return "";
+                //functionality to remove all spaces in the input string
+                input = input.Replace(" ", "");
+                input = System.Text.RegularExpressions.Regex.Replace(input, @"\s+", "");
+                return input;
             }
-
             catch (Exception e)
-
             {
                 return "Error evaluating expression: " + e;
             }
-
         }
-
         static void Main(string[] args)
-
         {
-
             string input;
-
             while ((input = Console.ReadLine()) != "exit")
 
             {
-
                 Console.WriteLine(ProcessCommand(input));
-
             }
-
         }
-
     }
-
 }
 
