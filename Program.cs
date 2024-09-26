@@ -7,7 +7,22 @@ using System.Threading.Tasks;
 namespace A1_SODV2202_Calculator
 {
 
-        // TODO Add supporting classes here
+    // TODO Add supporting classes here
+    public class Token
+    {
+        //This is used to store the math expressions...
+        public string expression;
+
+        public Token(string expression)
+        {
+            this.expression = expression;
+        }
+    }
+
+    public class Parse
+    {
+
+    }
     public class Program
 
     {
@@ -17,16 +32,8 @@ namespace A1_SODV2202_Calculator
         {
 
             try
-
             {
-
-
-
-
-
-
                 return "";
-
             }
 
             catch (Exception e)
