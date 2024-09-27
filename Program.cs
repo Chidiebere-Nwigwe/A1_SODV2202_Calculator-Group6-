@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 
 namespace A1_SODV2202_Calculator
 {
-
-    // TODO Add supporting classes here
-
     //A token class is created to split the user input and seperate it into numbers and operators.
     public class Token
     {
@@ -35,6 +32,7 @@ namespace A1_SODV2202_Calculator
 
             //logic for looping through the characters in the math expression
             for (int i = 0; i < expression.Length; i++)
+
             {
                 //accessing the characters in expression using i as the index number.
                 Char ch = expression[i];
@@ -210,15 +208,16 @@ namespace A1_SODV2202_Calculator
         }
 
     }
-
     public class Program
-
     {
         public static string ProcessCommand(string input)
         {
             try
             {
-                return "";
+                //functionality to remove all spaces in the input string
+                input = input.Replace(" ", "");
+                input = System.Text.RegularExpressions.Regex.Replace(input, @"\s+", "");
+                return input;
             }
             catch (Exception e)
             {
