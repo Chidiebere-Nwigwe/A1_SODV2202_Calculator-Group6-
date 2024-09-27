@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace A1_SODV2202_Calculator
 {
-    // TODO Add supporting classes here
-
     //A token class is created to split the user input and seperate it into numbers and operators.
     public class Token
     {
@@ -33,6 +32,7 @@ namespace A1_SODV2202_Calculator
 
             //logic for looping through the characters in the math expression
             for (int i = 0; i < expression.Length; i++)
+
             {
                 //accessing the characters in expression using i as the index number.
                 Char ch = expression[i];
@@ -153,8 +153,61 @@ namespace A1_SODV2202_Calculator
             }
             return num_stack;
         }
-    }
 
+        //method to take the postfix expression and evaluate it
+        public double Evaluate(List<string> postfixTokens)
+        {
+            //creating a value stack
+            Stack<double> values = new Stack<double>();
+
+            foreach (string token in postfixTokens)
+            {
+
+                //parsing the string into a number. we tried using "double.Parse(token)", but it obviously did not work :(
+                if (double.TryParse(token, out double num))
+                {
+                    values.Push(num);
+                }
+                else
+                {
+                    //error handling to make sure that the values are more than two
+                    if (values.Count < 2)
+                    {
+                        throw new InvalidOperationException("There are not enough values to perform mathematical operation");
+                    }
+
+                    //doing the calculation and evaluation.
+                    double b = values.Pop();
+                    double a = values.Pop();
+
+                    switch (token)
+                    {
+                        case "+":
+                            values.Push(a + b);
+                            break;
+
+                        case "-":
+                            values.Push(a - b);
+                            break;
+
+                        case "*":
+                            values.Push(a * b);
+                            break;
+
+                        case "/":
+                            values.Push(a / b);
+                            break;
+                    }
+                    //I wrote this line of code to find the error when the code was not working. Anyone is free to remove it.
+                    Console.WriteLine("Value a: " + a + " value b: " + b);
+
+                }
+
+            }
+            return values.Pop();
+        }
+
+    }
     public class Program
     {
         public static string ProcessCommand(string input)
@@ -175,7 +228,6 @@ namespace A1_SODV2202_Calculator
         {
             string input;
             while ((input = Console.ReadLine()) != "exit")
-
             {
                 Console.WriteLine(ProcessCommand(input));
             }
