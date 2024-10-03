@@ -1,18 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace A1_SODV2202_Calculator
 {
-    // TODO Add supporting classes here
-
     //A token class is created to split the user input and seperate it into numbers and operators.
     public class Token
     {
         //This is used to store the math expressions...
-
         public string expression;
 
         public Token(string expression)
@@ -33,6 +28,7 @@ namespace A1_SODV2202_Calculator
 
             //logic for looping through the characters in the math expression
             for (int i = 0; i < expression.Length; i++)
+
             {
                 //accessing the characters in expression using i as the index number.
                 Char ch = expression[i];
@@ -106,17 +102,6 @@ namespace A1_SODV2202_Calculator
                     //If it is a number, we will add it straight to the final stack as shown in the video from the link above
                     num_stack.Add(token);
                 }
-
-                //I moved this logic to the token class,because it was clashing with the operator precedence logic
-                /* //Conditional logic to check for negative numbers. MUST COME BEFORE OPERATORS CONDITIONAL LOGIC!!!!!(Learnt this from experience)
-                 else if (token == "-" && (operators.Count == 0|| operators.Peek() == "(" || Precedence.ContainsKey(operators.Peek())))
-                 {
-                         //if the token is a minus sign, and there are no operators or there is an opening bracket or there is an operator before it, then add 0 to the postfix stack
-                         num_stack.Add("0");
-                         //then push the token to the operators stack
-                         operators.Push(token);
-                 }*/
-
                 //conditional logic to check if operator is available in tokens list
                 else if (Precedence.ContainsKey(token))
                 {
@@ -153,19 +138,81 @@ namespace A1_SODV2202_Calculator
             }
             return num_stack;
         }
-    }
 
+        //method to take the postfix expression and evaluate it
+        public double Evaluate(List<string> postfixTokens)
+        {
+            //creating a value stack
+            Stack<double> values = new Stack<double>();
+
+            foreach (string token in postfixTokens)
+            {
+
+                //parsing the string into a number. we tried using "double.Parse(token)", but it obviously did not work :(
+                if (double.TryParse(token, out double num))
+                {
+                    values.Push(num);
+                }
+                else
+                {
+                    //error handling to make sure that the values are more than two
+                    if (values.Count < 2)
+                    {
+                        throw new InvalidOperationException("There are not enough values to perform mathematical operation");
+                    }
+
+                    //doing the calculation and evaluation.
+                    double b = values.Pop();
+                    double a = values.Pop();
+
+                    switch (token)
+                    {
+                        case "+":
+                            values.Push(a + b);
+                            break;
+
+                        case "-":
+                            values.Push(a - b);
+                            break;
+
+                        case "*":
+                            values.Push(a * b);
+                            break;
+
+                        case "/":
+                            values.Push(a / b);
+                            break;
+                    }
+                }
+            }
+            return values.Pop();
+        }
+    }
     public class Program
     {
         public static string ProcessCommand(string input)
         {
             try
             {
-                //functionality to remove all spaces in the input string
+                //To remove and handle spacing
                 input = input.Replace(" ", "");
                 input = System.Text.RegularExpressions.Regex.Replace(input, @"\s+", "");
-                return input;
+
+                //using the token class and the tokenizer method
+                Token tokenizer = new Token(input);
+                List<string> tokens = tokenizer.Tokenize();
+
+                //using the parse class and the convert method
+                Parse parser = new Parse();
+                List<string> postfix = parser.Convert(tokens);
+
+                //using the evaluate method for the final result
+                double result = parser.Evaluate(postfix);
+
+                //returning the result in a string format
+                return result.ToString();
             }
+            //error handling and stuff
             catch (Exception e)
             {
                 return "Error evaluating expression: " + e;
@@ -175,11 +222,9 @@ namespace A1_SODV2202_Calculator
         {
             string input;
             while ((input = Console.ReadLine()) != "exit")
-
             {
                 Console.WriteLine(ProcessCommand(input));
             }
         }
     }
 }
-
