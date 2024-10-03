@@ -1,9 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace A1_SODV2202_Calculator
 {
@@ -11,7 +8,6 @@ namespace A1_SODV2202_Calculator
     public class Token
     {
         //This is used to store the math expressions...
-
         public string expression;
 
         public Token(string expression)
@@ -106,17 +102,6 @@ namespace A1_SODV2202_Calculator
                     //If it is a number, we will add it straight to the final stack as shown in the video from the link above
                     num_stack.Add(token);
                 }
-
-                //I moved this logic to the token class,because it was clashing with the operator precedence logic
-                /* //Conditional logic to check for negative numbers. MUST COME BEFORE OPERATORS CONDITIONAL LOGIC!!!!!(Learnt this from experience)
-                 else if (token == "-" && (operators.Count == 0|| operators.Peek() == "(" || Precedence.ContainsKey(operators.Peek())))
-                 {
-                         //if the token is a minus sign, and there are no operators or there is an opening bracket or there is an operator before it, then add 0 to the postfix stack
-                         num_stack.Add("0");
-                         //then push the token to the operators stack
-                         operators.Push(token);
-                 }*/
-
                 //conditional logic to check if operator is available in tokens list
                 else if (Precedence.ContainsKey(token))
                 {
@@ -198,15 +183,10 @@ namespace A1_SODV2202_Calculator
                             values.Push(a / b);
                             break;
                     }
-                    //I wrote this line of code to find the error when the code was not working. Anyone is free to remove it.
-                    Console.WriteLine("Value a: " + a + " value b: " + b);
-
                 }
-
             }
             return values.Pop();
         }
-
     }
     public class Program
     {
@@ -214,11 +194,25 @@ namespace A1_SODV2202_Calculator
         {
             try
             {
-                //functionality to remove all spaces in the input string
+                //To remove and handle spacing
                 input = input.Replace(" ", "");
                 input = System.Text.RegularExpressions.Regex.Replace(input, @"\s+", "");
-                return input;
+
+                //using the token class and the tokenizer method
+                Token tokenizer = new Token(input);
+                List<string> tokens = tokenizer.Tokenize();
+
+                //using the parse class and the convert method
+                Parse parser = new Parse();
+                List<string> postfix = parser.Convert(tokens);
+
+                //using the evaluate method for the final result
+                double result = parser.Evaluate(postfix);
+
+                //returning the result in a string format
+                return result.ToString();
             }
+            //error handling and stuff
             catch (Exception e)
             {
                 return "Error evaluating expression: " + e;
@@ -234,4 +228,3 @@ namespace A1_SODV2202_Calculator
         }
     }
 }
-
