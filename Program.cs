@@ -190,10 +190,42 @@ namespace A1_SODV2202_Calculator
     }
     public class Program
     {
+        private static double lastResult = 0; // Variable to store the last result
+
+        private static double letterX = 0; // Variable x will always be a zero until assigned by user , then it will  take the value assigned.
         public static string ProcessCommand(string input)
         {
             try
             {
+                // check if input contains X to know if its an assignment operator or just a calculation
+                //if its a calculation, x will always be 0 until assigned by user.
+                if (input.Contains("x"))
+                {
+                    if (input.Contains("="))
+                    {
+                        string[] arr;
+                        arr = input.Split('=');
+                        letterX = double.Parse(arr[1]);
+
+                        //Replace x and X with the letterX
+                        input = input.Replace(" ", "");
+                        input = System.Text.RegularExpressions.Regex.Replace(input, @"\s+", "");
+                        input.Replace("x", letterX.ToString()).Replace("X", letterX.ToString());
+
+                        return input.Substring(2); // return value of x when assigned.
+
+                    }
+                    input = input.Replace(" ", "");
+                    input = System.Text.RegularExpressions.Regex.Replace(input, @"\s+", "");
+                    input = input.Replace("x", letterX.ToString()).Replace("X", letterX.ToString());
+
+                }
+
+
+                // Replace "ans" and "ANS" with the last result
+                input = input.Replace("ans", lastResult.ToString())
+                             .Replace("ANS", lastResult.ToString());
+
                 //To remove and handle spacing
                 input = input.Replace(" ", "");
                 input = System.Text.RegularExpressions.Regex.Replace(input, @"\s+", "");
